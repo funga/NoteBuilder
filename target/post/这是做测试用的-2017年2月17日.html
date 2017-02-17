@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>FunGa Java 札记</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/prism.css">
+</head>
+<body>
+<a href="../index.html"><div class="container my-page-logo"></div></a>
+<div class="my-page-header">
+</div>
+
+<div class="container">
+    <div class="col-sm-8">
+        <div class="post-full">
+            <div class="post-header">
+                <h3>这是做测试用的</h3>
+                <div>
+                    <span class="label label-info">原创</span>
+                    <span class="label label-default">2017年2月17日</span>
+                </div>
+                <div class="bdsharebuttonbox pull-right"><a href="#" class="bds_more" data-cmd="more"></a><a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a><a href="#" class="bds_qingbiji" data-cmd="qingbiji" title="分享到轻笔记"></a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a><a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a><a href="#" class="bds_print" data-cmd="print" title="分享到打印"></a></div>
+                <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+            </div>
+            <div class="post-content">
+                
+
+<p> </p>
+
+<blockquote>
+  <p>啊圣诞节和看看地方卡的收费会计师的发挥上框架的疯狂看连连看好了可好了好了好了看还好啦看看了好看了看见回来</p>
+</blockquote>
+
+<p><pre><code>python
+import shutil
+import sys
+reload(sys)
+sys.setdefaultencoding("utf8")
+postList = os.listdir("post")
+noteTemplate = open("template/note.html")
+tempHTml = noteTemplate.read()
+for post in postList:
+    html = markdown2.markdown_path("post/"+post)
+    if not os.path.exists(r"target/post"):
+        os.makedirs("target/post")
+    if os.path.exists(r"target/static"):
+        shutil.rmtree("target/static")
+    shutil.copytree("static","target/static")
+    fp = open("target/post/第一篇测试文件.html","w")
+    fp.write(tempHTml.replace("{{post-content}}",html))
+    fp.close()
+</code></pre></p>
+
+<h4>ihoidshoi</h4>
+
+<p>看好了看好了快来看后回来了很快会离开</p>
+
+            </div>
+            <div class="post-comment">
+                <!-- 多说评论框 start -->
+                <div class="ds-thread" data-thread-key="这是做测试用的" data-title="这是做测试用的" data-url="http://funga.cn/p/这是做测试用的-2017年2月17日.html"></div>
+                <!-- 多说评论框 end -->
+                <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+                <script type="text/javascript">
+                    var duoshuoQuery = {short_name:"fungablog"};
+                    (function() {
+                        var ds = document.createElement('script');
+                        ds.type = 'text/javascript';ds.async = true;
+                        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+                        ds.charset = 'UTF-8';
+                        (document.getElementsByTagName('head')[0]
+                        || document.getElementsByTagName('body')[0]).appendChild(ds);
+                    })();
+                </script>
+                <!-- 多说公共JS代码 end -->
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="side-bar">
+<!--            <div class="side-box">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="多个关键字使用空格隔开">
+                      <span class="input-group-btn">
+                        <button class="btn btn-primary" type="button">搜索</button>
+                      </span>
+                </div>&lt;!&ndash; /input-group &ndash;&gt;
+            </div>-->
+            <div class="side-box">
+                <div class="side-title">热评文章</div>
+                <!-- 多说热评文章 start -->
+                <div class="ds-top-threads" data-range="monthly" data-num-items="5"></div>
+                <!-- 多说热评文章 end -->
+                <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+                <script type="text/javascript">
+                    var duoshuoQuery = {short_name:"fungablog"};
+                    (function() {
+                        var ds = document.createElement('script');
+                        ds.type = 'text/javascript';ds.async = true;
+                        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+                        ds.charset = 'UTF-8';
+                        (document.getElementsByTagName('head')[0]
+                        || document.getElementsByTagName('body')[0]).appendChild(ds);
+                    })();
+                </script>
+                <!-- 多说公共JS代码 end -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="my-page-footer">
+    <div class="container footer-">
+        <div class="col-sm-4">
+            <h4>站点说明</h4>
+            <p>一款基于Codeigniter、Amazeui(Html5)开发的简洁、易用、跨平台自适应的Markdown博客系统.
+                使用Amaze UI 跨屏前端框架实现模板
+                支持多平台、终端
+                嗯嗯嗯，不知道说啥了。感谢这些开源的程序</p>
+        </div>
+        <div class="col-sm-4">
+            <h4>社交账号</h4>
+            <p>
+
+            </p>
+        </div>
+        <div class="col-sm-4">
+            <h4>友情链接</h4>
+            <p>
+                <a href="#">小米网</a>
+                <a href="#">小米网</a> <a href="#">小米网</a>
+            </p>
+        </div>
+    </div>
+    <div class="copy-right">
+        ©2015 京ICP备15032849号-3 FunGa IT 札记
+    </div>
+</div>
+
+<script rel="script" src="../static/js/prism.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+# blogFactory配置文件
+url: /
+title:
+theme: default
+duoshuo: funga
+baiduAnalytics:
+keywords: GitBlog,博客,Markdown博客,jockchou
+description: >
+    GitBlog是一个简单易用的Markdown博客系统
+author:
+    name: FunGa
+    email: funga@sina.cn
+    github: https://github.com/funga
+    weibo: http://weibo.com/funga
+blog:
+    pageSize: 6

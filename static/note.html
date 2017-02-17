@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>FunGa Java 札记</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+<a href="../index.html"><div class="container my-page-logo"></div></a>
+<div class="my-page-header">
+</div>
+
+<div class="container">
+    <div class="col-sm-8">
+        <div class="post-full">
+            <div class="post-header">
+                <h3>AWVS AcuSensor功能分析</h3>
+                <div>
+                    <span class="label label-info">原创</span>
+                    <span class="label label-default">2017年2月17日</span>
+                </div>
+                <div class="bdsharebuttonbox pull-right"><a href="#" class="bds_more" data-cmd="more"></a><a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a><a href="#" class="bds_qingbiji" data-cmd="qingbiji" title="分享到轻笔记"></a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a><a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a><a href="#" class="bds_print" data-cmd="print" title="分享到打印"></a></div>
+                <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+            </div>
+            <div class="post-content">
+                <div class="am-article-bd">
+
+                    <p>
+                    </p><h1>AWVS&nbsp;AcuSensor功能分析</h1>
+                    <h1>AcuSensor</h1>
+                    <p>AcuSensor是Acunetix Web Vulnerability Scanner推出的基于交互式应用安全检测(IAST)技术的Web漏洞扫描功能，目前支持.net、php两种语言站点，根据目标站点可以分别配置生成agent端。</p>
+                    <p>其中.net程序的agent端是一个客户端setup程序，需要在web服务器上安装并配置iis、站点目录等。</p>
+                    <p>php程序的agent是一个php文件(配置生存的php代码经过混淆)，php文件需要上传至web服务器并配置php.ini文件auto_prepend_file字段，该字段功能是将该php文件加入网站文件页眉中。</p>
+                    <h1>agent原理及实现分析</h1>
+                    <p>AcuSensor的agent主要作用是对php关键函数SQL_Query、File_Open、Sys_Command、Create_Function、Delete_File等进行监控。当这些函数执行将参数及相关信息echo到response&nbsp;body中供扫描器分析。Agent代码功能及流程如下:</p>
+                    <p>1、判断http header字段是否存在及密码正确性，从而执行agent，直接访问agent页面返回404；</p>
+                    <p>2、根据Acunetix-Aspect-Queries字段判断特定任务类型：aspectalerts、filelist两种，无Acunetix-Aspect-Queries则执行一般的IAST任务:</p>
+                    <blockquote>
+                        <p>aspectalerts：php config信息等</p>
+                        <p>filelist：该页面文件所在目录的所有的文件列表信息</p>
+                    </blockquote>
+                    <p>3、判断HTTP_ACUNETIX_ASPECT状态是否为enable，并检查HTTP_ACUNETIX_ASPECT_PASSWORD字段是否和预设password相同。password编码后保存在agent文件末尾；</p>
+                    <p>4、使用set_error_handler函数设置一个用户定义的错误处理函数。根据不同的错误类型在响应内容中echo错误信息：
+                        <img src="http://i1.piimg.com/567571/7a9bbb7ca8367819.png" alt="">
+                        <img src="http://p1.bpimg.com/567571/cb4c244a274077d4.png" alt=""></p>
+                    <p>5、使用token_get_all将访问的php文件源代码进行解析，对class、函数、参数、注释、T_VARIABLE等各种字段进行处理并保存在临时文件当中；</p>
+                    <p>6、对于临时文件中需要监控的函数则替换为自定义函数，自定义函数中再调用监控函数。然后执行临时php文件；</p>
+                    <p>7、 使用debug_backtrace跟踪php程序执行的bug信息，获取当前函数、class、args、object、line、file信息，如图：
+                        <img src="http://p1.bpimg.com/567571/16e29d97dd2aa053.png" alt=""></p>
+                    <p>8、对于返回的信息进行格式化，如：
+                        00000010PHP_File_Includes00000014database_connect.php00000018/hj/var/www//product.php00000001s0000001A"require_once"&nbsp;was&nbsp;called.
+                        其中00000010为16进制，表示后面数据的长度，该串数字后可能出现""、"s"、"n"、"a",分别标识16进制数后面的数据是string、null、array类型。</p>
+                    <h1>AcuSensor&nbsp;漏洞检测原理</h1>
+                    <h3>SQL&nbsp;injection漏洞实例</h3>
+                    <p>AcuSensor在扫描到sql注入时会根据Agent返回的信息判断漏洞是否真实存在，如真实存在则标注verified，并给出具体漏洞php文件、漏洞产生的对应代码行数
+                        <img src="http://i1.piimg.com/567571/551ff47bb23803af.png" alt=""></p>
+                    <h3>SQL&nbsp;injection漏洞数据包分析</h3>
+                    <p>AcuSensor&nbsp;Agent将监控到的漏洞信息通过base64编码返回到相应消息中，扫描器获取数据得到漏洞详细信息。如图:
+                        <img src="http://i1.piimg.com/567571/a7d21e8368edece1.png" alt=""></p>
+                    <p></p>
+                </div>
+            </div>
+            <div class="post-comment">
+                <!-- 多说评论框 start -->
+                <div class="ds-thread" data-thread-key="adfadsf" data-title="asdf" data-url="afadf"></div>
+                <!-- 多说评论框 end -->
+                <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+                <script type="text/javascript">
+                    var duoshuoQuery = {short_name:"fungablog"};
+                    (function() {
+                        var ds = document.createElement('script');
+                        ds.type = 'text/javascript';ds.async = true;
+                        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+                        ds.charset = 'UTF-8';
+                        (document.getElementsByTagName('head')[0]
+                        || document.getElementsByTagName('body')[0]).appendChild(ds);
+                    })();
+                </script>
+                <!-- 多说公共JS代码 end -->
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="side-bar">
+<!--            <div class="side-box">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="多个关键字使用空格隔开">
+                      <span class="input-group-btn">
+                        <button class="btn btn-primary" type="button">搜索</button>
+                      </span>
+                </div>&lt;!&ndash; /input-group &ndash;&gt;
+            </div>-->
+            <div class="side-box">
+                <div class="side-title">热评文章</div>
+                <!-- 多说热评文章 start -->
+                <div class="ds-top-threads" data-range="monthly" data-num-items="5"></div>
+                <!-- 多说热评文章 end -->
+                <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+                <script type="text/javascript">
+                    var duoshuoQuery = {short_name:"fungablog"};
+                    (function() {
+                        var ds = document.createElement('script');
+                        ds.type = 'text/javascript';ds.async = true;
+                        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+                        ds.charset = 'UTF-8';
+                        (document.getElementsByTagName('head')[0]
+                        || document.getElementsByTagName('body')[0]).appendChild(ds);
+                    })();
+                </script>
+                <!-- 多说公共JS代码 end -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="my-page-footer">
+    <div class="container footer-">
+        <div class="col-sm-4">
+            <h4>站点说明</h4>
+            <p>一款基于Codeigniter、Amazeui(Html5)开发的简洁、易用、跨平台自适应的Markdown博客系统.
+                使用Amaze UI 跨屏前端框架实现模板
+                支持多平台、终端
+                嗯嗯嗯，不知道说啥了。感谢这些开源的程序</p>
+        </div>
+        <div class="col-sm-4">
+            <h4>社交账号</h4>
+            <p>
+
+            </p>
+        </div>
+        <div class="col-sm-4">
+            <h4>友情链接</h4>
+            <p>
+                <a href="#">小米网</a>
+                <a href="#">小米网</a> <a href="#">小米网</a>
+            </p>
+        </div>
+    </div>
+    <div class="copy-right">
+        ©2015 京ICP备15032849号-3 FunGa IT 札记
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,72 @@
+a{
+    text-decoration: none;
+}
+a:hover{
+    text-decoration: none;
+    color: dodgerblue;
+}
+.my-page-logo{
+    background: url("../image/page_logo.png") no-repeat;
+    height: 82px;
+    margin-bottom: 10px;
+}
+.my-page-header{
+    background: url("../image/code_bg.png");
+    height: 120px;
+}
+
+.post-list{
+    margin: 40px 20px;
+    clear: both;
+}
+
+.post{
+    clear: both;
+    padding: 10px 0px;
+}
+.post-full{
+    margin: 40px 0px;
+}
+.post-header{
+    margin: 10px 0px;
+    text-align: center;
+    border-bottom: 1px solid #EEE;
+    padding-bottom: 30px;
+}
+
+.post-content{
+    margin: 20px 0px;
+}
+
+
+.diver{
+    margin-bottom: 10px;
+    background: #EEE;
+    height: 1px;
+    clear: both;
+}
+
+.side-bar{
+    margin:40px 20px ;
+}
+.side-box{
+    margin-bottom: 20px;
+}
+.side-title{
+    font-size: 16px;
+    font-weight: bold;
+    color: #252525;
+    border-bottom: 1px solid #252525;
+}
+
+.my-page-footer{
+    background: #252525;
+    color: #ffffff !important;
+    margin-top: 5px;
+}
+.copy-right{
+    margin-top: 10px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+}
