@@ -48,9 +48,17 @@ for post in postList:
     post_blockquote = ""
     if len(blockquote_list) > 0:
         post_blockquote = blockquote_list[0].replace("\n","").replace("<p>","").replace("</p>","")
-
+    # 去掉标题和时间\类型
     html = html.replace("<h2>"+title+"</h2>","").replace("<strong>"+noteDate+"</strong>","").replace("<strong>"+noteType+"</strong>","")
+    # 代码高亮
+    res_code = r'<code>(.*?)</code>'
+    codeList = re.findall(res_code,html,re.S|re.M)
 
+    for code in codeList:
+        codeType = code.split("\n")[0]
+        srcCode = "<code>" + code + "</code>"
+        newCode = "<pre><code class='language-"+codeType+"'>"+code.replace(codeType+"\n","")+"</code></pre>";
+        html = html.replace(srcCode,newCode)
     fileName = title + "-" + noteDate
     post_dict = {"title":title,"date":noteDate,"type":noteType,"summary":post_blockquote}
     post_list.append(post_dict)
@@ -62,28 +70,9 @@ for post in postList:
              .replace("<code>","<pre><code>")
              .replace("</code>","</code></pre>"))
     fp.close()
-print json.dumps(post_list)
 
+dj = open("target/data.json","w")
+dj.write(json.dumps(post_list))
+dj.close()
 
-
-# yl= yaml.load(file("config.yaml"))
-# print yl["author"]["name"]
-
-# html = markdown2.markdown_path("README.md")
-#
-#
-# res_tr = r'<code>(.*?)</code>'
-# codeBlock = re.findall(res_tr,html,re.S|re.M)
-# codeBlockCount = len(codeBlock)
-# if codeBlockCount != 0 :
-#     for i in range(codeBlockCount):
-#         codeStr = codeBlock[i]
-#         langType = codeStr.split("\n")[0]
-#         codeStr = "<pre><code class='language-"+langType+"'>"+codeStr.replace(langType,"")+"</code></pre>"
-#         print codeStr
-# 第一个<h2>表示文章标题。
-# 第一个<strong>标记了原创还是转载，第二个<strong>表示当前时间。
-# 第一个<blockquote>表示文章的预览内容。
-# 文章所有<code>标签会被加个<pre>标签包裹，同时<code>添加class=language-xxx属性。
-# 生成的HTML
 
