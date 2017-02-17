@@ -71,6 +71,12 @@ for post in postList:
              .replace("</code>","</code></pre>"))
     fp.close()
 
+# 把主页复制进去
+index = open("target/index.html","w")
+index.write(open("index.html").read());
+index.close()
+
+# 写入菜单数据
 dj = open("target/data.json","w")
 dj.write(json.dumps(post_list))
 dj.close()
