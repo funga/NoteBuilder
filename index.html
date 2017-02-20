@@ -16,8 +16,8 @@
     </div>
 <div class="container">
     <div class="col-sm-8">
-        <div class="post-list">
-            <div class="post">
+        <div class="post-list" id="post-list">
+<!--            <div class="post">
                 <div class="col-sm-6">
                     <a href="static/note.html" class="thumbnail">
                         <img src="static/image/test.png" alt="21天精通Java">
@@ -205,7 +205,7 @@
                     </p>
                 </div>
             </div>
-            <div class="diver"></div>
+            <div class="diver"></div>-->
         </div>
         <div class="pull-right">
         <nav aria-label="Page navigation">
@@ -240,6 +240,16 @@
                 </div><!-- /input-group -->
             </div>
             <div class="side-box">
+                <script>
+                var mediav_ad_pub = 'asdUMg_1275501';
+                var mediav_ad_width = '300';
+                var mediav_ad_height = '250';
+                </script>
+
+                <script type="text/javascript" language="javascript" charset="utf-8"  src="http://static.mediav.com/js/mvf_g2.js"></script>
+
+            </div>
+            <div class="side-box">
                 <div class="side-title">热评文章</div>
                 <!-- 多说热评文章 start -->
                 <div class="ds-top-threads" data-range="monthly" data-num-items="5"></div>
@@ -265,38 +275,62 @@
     <div class="container footer-">
         <div class="col-sm-4">
             <h4>站点说明</h4>
-            <p>一款基于Codeigniter、Amazeui(Html5)开发的简洁、易用、跨平台自适应的Markdown博客系统.
-                使用Amaze UI 跨屏前端框架实现模板
-                支持多平台、终端
-                嗯嗯嗯，不知道说啥了。感谢这些开源的程序</p>
+            <p>本站为个人IT博客,大部分博文属于个人原创,兼转载收集少量质量上佳文章.如需转载本站文章请注明原文出处与链接,同时,如果本站侵犯了您的权益,请及时联系告知,本站第一时间处理.</p>
         </div>
         <div class="col-sm-4">
             <h4>社交账号</h4>
             <p>
-
+                邮箱 : <a href="mailto:funga@sina.cn">funga@sina.cn</a><br>
+                微博 : <a href="http://weibo.com/funga">FunGa黄佳</a>
             </p>
         </div>
         <div class="col-sm-4">
             <h4>友情链接</h4>
             <p>
-                <a href="#">小米网</a>
-                <a href="#">小米网</a> <a href="#">小米网</a>
+                <a href="https://github.com">github</a>
+                <a href="http://mi.com">小米网</a>
             </p>
         </div>
     </div>
     <div class="copy-right">
         ©2015 京ICP备15032849号-3 FunGa IT 札记
     </div>
+
 </div>
 
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
 <script>
     $(function () {
+
+        // 全屏
+
+        $('#post-list').css('min-height',$(window).height() - 476);
+
         $.getJSON("data.json",function (data) {
-            alert(data);
-//            TODO
+            $.each(data,function(index,post){
+                var href = "post/"+post["title"] +"-" +post["date"]+".html";
+                var post_html = '<div class="post">';
+                post_html += '<div class="col-sm-6">';
+                post_html += '<a href="post/'+post["title"]+'-'+post["date"]+'.html" class="thumbnail">';
+                post_html += '<img src="'+post["thumb"]+'">';
+                post_html += ' </a></div>';
+                post_html += '<div class="col-sm-6"> <div>';
+                post_html += '<span class="label label-info">'+post["type"]+'</span>&nbsp;';
+                post_html += '<span class="label label-default">'+post["date"]+'</span>';
+                post_html += "</div>";
+                post_html += '<a href="'+href+'"><h4>'+post["title"]+'</h4></a>';
+                post_html += '<p>';
+                post_html += post["summary"];
+                post_html += '</p>';
+                post_html += '<p>';
+                post_html += '<a class="btn-link pull-right" href="'+href+'">阅读全文 >></a>';
+                post_html += '</p></div></div><div class="diver"></div>';
+
+                $("#post-list").append(post_html);
+            });
         })
     })
 </script>
+
 </body>
 </html>

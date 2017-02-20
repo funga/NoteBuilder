@@ -12,7 +12,7 @@ a:hover{
 }
 .my-page-header{
     background: url("../image/code_bg.png");
-    height: 120px;
+    height: 60px;
 }
 
 .post-list{
@@ -26,6 +26,9 @@ a:hover{
 }
 .post-full{
     margin: 40px 0px;
+}
+.post-full img{
+    width: 100%;
 }
 .post-header{
     margin: 10px 0px;
@@ -69,4 +72,9 @@ a:hover{
     height: 20px;
     line-height: 20px;
     text-align: center;
+}
+.ds-top-threads li{
+    margin:5px 0px;
+    list-style-type: none;
+    font-size: 16px;
 }
