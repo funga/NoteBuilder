@@ -208,6 +208,7 @@
             <div class="diver"></div>-->
         </div>
         <div class="pull-right">
+            <!-- 分页 -->
         <nav aria-label="Page navigation">
             <ul class="pagination">
                 <li>
@@ -232,12 +233,18 @@
     <div class="col-sm-4">
         <div class="side-bar">
             <div class="side-box">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="多个关键字使用空格隔开">
+                <form action="http://www.google.com.hk" id="cse-search-box">
+                  <div class="input-group">
+                    <input type="hidden" name="cx" value="partner-pub-7354195822953594:1406552661" />
+                    <input type="hidden" name="ie" value="UTF-8" />
+                    <input type="text" name="q" size="36" class="form-control"/>
                       <span class="input-group-btn">
-                        <button class="btn btn-primary" type="button">搜索</button>
+                        <input type="submit" name="sa" value="&#x641c;&#x7d22;" class="btn btn-primary"/>
                       </span>
-                </div><!-- /input-group -->
+                  </div>
+                </form>
+
+                <script type="text/javascript" src="http://www.google.com.hk/coop/cse/brand?form=cse-search-box&amp;lang=zh-Hans"></script>
             </div>
             <div class="side-box">
                 <script>
@@ -267,6 +274,15 @@
                     })();
                 </script>
                 <!-- 多说公共JS代码 end -->
+            </div>
+            <div class="side-box">
+                <script type="text/javascript">
+                var sogou_ad_id=782343;
+                var sogou_ad_height=250;
+                var sogou_ad_width=300;
+                </script>
+                <script type='text/javascript' src='http://images.sohu.com/cs/jsfile/js/c.js'></script>
+
             </div>
         </div>
     </div>
@@ -305,6 +321,8 @@
         // 全屏
 
         $('#post-list').css('min-height',$(window).height() - 476);
+//        每页展示6条数据
+        var countPerPage = 6;
 
         $.getJSON("data.json",function (data) {
             $.each(data,function(index,post){

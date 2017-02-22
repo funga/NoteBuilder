@@ -60,14 +60,14 @@ for post in postList:
     # 去掉标题和时间\类型
     html = html.replace("<h2>"+title+"</h2>","").replace("<strong>"+noteDate+"</strong>","").replace("<strong>"+noteType+"</strong>","")
     # 代码高亮
-    res_code = r'<code>(.*?)</code>'
-    codeList = re.findall(res_code,html,re.S|re.M)
-
-    for code in codeList:
-        codeType = code.split("\n")[0]
-        srcCode = "<code>" + code + "</code>"
-        newCode = "<pre><code class='language-"+codeType+"'>"+code.replace(codeType+"\n","")+"</code></pre>";
-        html = html.replace(srcCode,newCode)
+    # res_code = r'<code>(.*?)</code>'
+    # codeList = re.findall(res_code,html,re.S|re.M)
+    #
+    # for code in codeList:
+    #     codeType = code.split("\n")[0]
+    #     srcCode = "<code>" + code + "</code>"
+    #     newCode = "<pre><code class='language-"+codeType+"'>"+code.replace(codeType+"\n","")+"</code></pre>";
+    #     html = html.replace(srcCode,newCode)
     fileName = title + "-" + noteDate
     # 拿到一张图片
     res_img = r'<img src="../static/image/(.*?)" alt="" />'
@@ -84,8 +84,9 @@ for post in postList:
              .replace("{{post-title}}",title)
              .replace("{{post-date}}",noteDate)
              .replace("{{post-type}}",noteType)
-             .replace("<code>","<pre><code>")
-             .replace("</code>","</code></pre>"))
+             # .replace("<code>","<pre><code>")
+             # .replace("</code>","</code></pre>")
+             )
     fp.close()
     printlog("["+title+"]转化完成")
 
