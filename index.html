@@ -6,6 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="static/css/style.css">
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d43373f6218c44826a1249ed1480da6b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
 </head>
 <body>
 <a href="index.html">
@@ -207,27 +217,9 @@
             </div>
             <div class="diver"></div>-->
         </div>
-        <div class="pull-right">
+        <div class="pull-right" id="page-nav">
             <!-- 分页 -->
-        <nav aria-label="Page navigation">
-            <ul class="pagination">
-                <li>
-                    <a href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li>
-                    <a href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+
         </div>
     </div>
     <div class="col-sm-4">
@@ -276,12 +268,6 @@
                 <!-- 多说公共JS代码 end -->
             </div>
             <div class="side-box">
-                <script type="text/javascript">
-                var sogou_ad_id=782343;
-                var sogou_ad_height=250;
-                var sogou_ad_width=300;
-                </script>
-                <script type='text/javascript' src='http://images.sohu.com/cs/jsfile/js/c.js'></script>
 
             </div>
         </div>
@@ -321,33 +307,100 @@
         // 全屏
 
         $('#post-list').css('min-height',$(window).height() - 476);
-//        每页展示6条数据
-        var countPerPage = 6;
 
         $.getJSON("data.json",function (data) {
-            $.each(data,function(index,post){
-                var href = "post/"+post["title"] +"-" +post["date"]+".html";
-                var post_html = '<div class="post">';
-                post_html += '<div class="col-sm-6">';
-                post_html += '<a href="post/'+post["title"]+'-'+post["date"]+'.html" class="thumbnail">';
-                post_html += '<img src="'+post["thumb"]+'">';
-                post_html += ' </a></div>';
-                post_html += '<div class="col-sm-6"> <div>';
-                post_html += '<span class="label label-info">'+post["type"]+'</span>&nbsp;';
-                post_html += '<span class="label label-default">'+post["date"]+'</span>';
-                post_html += "</div>";
-                post_html += '<a href="'+href+'"><h4>'+post["title"]+'</h4></a>';
-                post_html += '<p>';
-                post_html += post["summary"];
-                post_html += '</p>';
-                post_html += '<p>';
-                post_html += '<a class="btn-link pull-right" href="'+href+'">阅读全文 >></a>';
-                post_html += '</p></div></div><div class="diver"></div>';
 
-                $("#post-list").append(post_html);
+            $.each(data,function(index,post){
+                if(index < 6){
+                    var href = "post/"+post["title"] +"-" +post["date"]+".html";
+                    var post_html = '<div class="post">';
+                    post_html += '<div class="col-sm-6">';
+                    post_html += '<a href="post/'+post["title"]+'-'+post["date"]+'.html" class="thumbnail">';
+                    post_html += '<img src="'+post["thumb"]+'">';
+                    post_html += ' </a></div>';
+                    post_html += '<div class="col-sm-6"> <div>';
+                    post_html += '<span class="label label-info">'+post["type"]+'</span>&nbsp;';
+                    post_html += '<span class="label label-default">'+post["date"]+'</span>';
+                    post_html += "</div>";
+                    post_html += '<a href="'+href+'"><h4>'+post["title"]+'</h4></a>';
+                    post_html += '<p>';
+                    post_html += post["summary"];
+                    post_html += '</p>';
+                    post_html += '<p>';
+                    post_html += '<a class="btn-link pull-right" href="'+href+'">阅读全文 >></a>';
+                    post_html += '</p></div></div><div class="diver"></div>';
+
+                    $("#post-list").append(post_html);
+                }
             });
+            createNav(data.length,1);
+
         })
     })
+
+//    分页切换
+    function switchPage(pageIndex) {
+        $.getJSON("data.json", function (postList) {
+            // 从postList中取出第pageIndex,最多取出6个进行渲染
+            var startIndex = (pageIndex - 1) * 6;
+            var endIndex = pageIndex * 6 - 1;
+            $("#post-list").empty();
+            $.each(postList, function (index, post) {
+                if (index >= startIndex && index <= endIndex) {
+                    var href = "post/" + post["title"] + "-" + post["date"] + ".html";
+                    var post_html = '<div class="post">';
+                    post_html += '<div class="col-sm-6">';
+                    post_html += '<a href="post/' + post["title"] + '-' + post["date"] + '.html" class="thumbnail">';
+                    post_html += '<img src="' + post["thumb"] + '">';
+                    post_html += ' </a></div>';
+                    post_html += '<div class="col-sm-6"> <div>';
+                    post_html += '<span class="label label-info">' + post["type"] + '</span>&nbsp;';
+                    post_html += '<span class="label label-default">' + post["date"] + '</span>';
+                    post_html += "</div>";
+                    post_html += '<a href="' + href + '"><h4>' + post["title"] + '</h4></a>';
+                    post_html += '<p>';
+                    post_html += post["summary"];
+                    post_html += '</p>';
+                    post_html += '<p>';
+                    post_html += '<a class="btn-link pull-right" href="' + href + '">阅读全文 >></a>';
+                    post_html += '</p></div></div><div class="diver"></div>';
+                    $("#post-list").append(post_html);
+                }
+            })
+            // 重新生成分页
+            createNav(postList.length, pageIndex);
+
+        })
+
+    }
+        function createNav(length, activeIndex) {
+            if (length > 6) {
+                var s = length / 6;
+                var mod = length % 6;
+                if (mod > 0) {
+                    s++;
+                }
+                var html = '<nav aria-label="Page navigation">';
+                if (s < 8) {
+                    var html = '<nav aria-label="Page navigation">';
+                    html += '<ul class="pagination">';
+                    /*html += '<li><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>';*/
+
+                    for (var i = 1; i <= s; i++) {
+                        if (i == activeIndex) {
+                            html += ' <li class="active"><a href="#">' + i + '</a></li>';
+                        } else {
+                            html += ' <li><a href="#" onclick="switchPage(' + i + ');">' + i + '</a></li>';
+                        }
+                    }
+
+                    /*html += '<li><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>';*/
+                }
+
+                $("#page-nav").html(html);
+
+            }
+        }
 </script>
 
 </body>
