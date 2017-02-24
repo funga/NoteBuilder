@@ -13,6 +13,35 @@ sys.setdefaultencoding("utf8")
 def printlog(msg):
     print time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))+"  "+msg
 
+def cmp(p1,p2):
+
+    d1 = p1["date"]
+    d2 = p2["date"]
+
+    year1 = int(d1.split("年")[0])
+    year2 = int(d2.split("年")[0])
+    if year1 > year2:
+        return 1
+    elif year1 < year2:
+        return -1
+
+    month1 = int(d1.split("年")[1].split("月")[0])
+    month2 = int(d2.split("年")[1].split("月")[0])
+    if month1 > month2:
+        return 1
+    elif month1 < month2:
+        return -1
+
+    day1 = int(d1.split("月")[1].split("日")[0])
+    day2 = int(d2.split("月")[1].split("日")[0])
+
+    if day1 > day2:
+        return 1
+    elif day1 < day2:
+        return -1
+
+    return 0
+
 
 printlog("开始构建")
 # 获取post文件夹中所有的文章
@@ -99,6 +128,10 @@ printlog("首页已生成")
 printlog("开始写入目录数据")
 # 写入菜单数据
 dj = open("target/data.json","w")
+# 对post_list进行排序
+post_list.sort(cmp)
+post_list.reverse()
+
 dj.write(json.dumps(post_list))
 dj.close()
 printlog("目录数据写入完成")
